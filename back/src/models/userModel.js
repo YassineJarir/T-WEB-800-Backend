@@ -3,9 +3,37 @@ const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
     _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
-    firstname: { type: String, required: true },
-    lastname: { type: String, required: true },
-    mail: { type: String, required: true, unique: true },
+    firstname: { 
+      type: String, 
+      required: true, 
+      validate: {
+        validator: function(v) {
+          return /^[a-zA-Z]+$/.test(v);
+        },
+        message:props => `${props.value} is not valid. First name must contain only alphabetic characters and can't be empty.`
+      }
+    },
+    lastname: { 
+      type: String, 
+      required: true,
+      validate: {
+        validator: function(v) {
+          return /^[a-zA-Z]+$/.test(v);
+        },
+        message:props => `${props.value} is not valid. Last name must contain only alphabetic characters and can't be empty.`
+      }
+    },
+    mail: { 
+      type: String, 
+      required: true, 
+      unique: true,
+      validate: {
+        validator: function(v) {
+            return /\S+@\S+\.\S+/.test(v);
+        },
+        message: props => `${props.value} is not a valid email address!`
+    }     
+    },
     password: { type: String, required: true },
 });
 

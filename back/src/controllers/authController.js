@@ -3,53 +3,68 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 
-// secret key from .env
+// Load environment variables
 dotenv.config();
+
+// Secret key for JWT from environment variable
 const secretKey = process.env.SECRET_KEY;
 
 /**
- * Fonction de connexion des utilisateurs.
- * Elle vérifie si l'adresse e-mail et le mot de passe fournis correspondent à un utilisateur enregistré.
- * Si les informations sont valides, génère un jeton JWT pour l'utilisateur.
+ * Logs in users.
+ * Verifies if the provided email and password match a registered user.
+ * If the information is valid, generates a JWT token for the user.
  *
- * @param {*} req - La requête HTTP entrante avec les informations de connexion.
- * @param {*} res - La réponse HTTP à renvoyer.
- * @returns {Object} - L'identifiant de l'utilisateur et le jeton JWT en cas de succès.
+ * @param {Object} req - The incoming HTTP request with login information.
+ * @param {Object} res - The HTTP response to send.
+ * @returns {Object} - The user ID and JWT token in case of success.
  */
-
 exports.login = async (req, res) => {
   const { mail, password } = req.body;
 
   try {
     const user = await User.findOne({ mail });
-
-    if (!user || !bcrypt.compare(password, user.password)) {
-      return res.status(401).json({ error: "Invalid credentials" });
+    if (!user) {
+      return res.status(401).json({ error: "This email doesn't exist." });
     }
+    
+    const passwordMatch = await bcrypt.compare(password, user.password);
 
-    jwt.sign(
-      { user_id: user._id },
-      secretKey,
-      { expiresIn: "1h" },
-      (err, token) => {
-        if (err) {
-          console.error(err);
-          res.status(500).json({ error: "Internal Server Error" });
-        } else {
-          res.json({
-            user_id: user._id,
-            token,
-          });
+    if (passwordMatch) {
+      jwt.sign(
+        { user_id: user._id },
+        secretKey,
+        { expiresIn: "1h" },
+        (err, token) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ error: "Internal Server Error" });
+          } else {
+            res.json({
+              user_id: user._id,
+              token,
+            });
+          }
         }
-      }
-    );
+      );
+    }
+    else {
+      return res.status(401).json({ error: "Incorrect password." });
+    }
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-
+/**
+ * Registers users.
+ * Checks if the provided email already exists in the database.
+ * If not, creates a new user and generates a JWT token for authentication.
+ *
+ * @param {Object} req - The incoming HTTP request with registration information.
+ * @param {Object} res - The HTTP response to send.
+ * @returns {Object} - The newly created user ID and JWT token in case of success.
+ */
 exports.register = async (req, res) => {
   const { firstname, lastname, mail, password } = req.body;
 
@@ -57,19 +72,16 @@ exports.register = async (req, res) => {
     const existingUser = await User.findOne({ mail });
 
     if (existingUser) {
-      return res.status(409).json({ error: "User already exists" });
+      throw new Error("User already exists");
     }
 
     const newUser = new User({ firstname, lastname, mail, password });
-
-    const salt = await bcrypt.genSalt(10);
-    newUser.password = await bcrypt.hash(newUser.password, salt);
 
     const savedUser = await newUser.save();
 
     // Sign a JWT token with the newly created user's ID
     jwt.sign(
-      { user_id: savedUser._id},
+      { user_id: savedUser._id },
       secretKey,
       { expiresIn: "1h" },
       (err, token) => {
