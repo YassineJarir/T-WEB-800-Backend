@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "npm run test && node app.js",
-    "test": "mocha"
+    "test": "mocha",
+    "build": "echo 'No build steps required for Express.js'"
   },
   "keywords": [],
   "author": "",
