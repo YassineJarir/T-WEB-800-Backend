@@ -4,13 +4,11 @@ const Suggestion = require('../models/suggestionModel');
 exports.createSuggestion = async (req, res) => {
     try {
         const { idPlace, lon, lat, name, type } = req.body;
-        const existingSuggestion = await Suggestion.findOne({ idPlace });
-        if (existingSuggestion) {
-            return res.status(400).json({ error: 'Suggestion with the same idPlace already exists' });
-        }
+
         const suggestion = new Suggestion({ idPlace, lon, lat, name, type });
         await suggestion.save();
-        res.status(201).json( suggestion );
+
+        res.status(201).json(suggestion);
     } catch (error) {
         console.error('Error:', error);
         res.status(500).json({ error: 'Internal server error' });

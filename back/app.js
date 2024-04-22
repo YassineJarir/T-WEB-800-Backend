@@ -10,6 +10,26 @@ const journeyRouter = require("./routes/journeyRoute");
 const cors = require("cors");
 const app = express();
 const port = 3000;
+const swaggerUi = require('swagger-ui-express');
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerDocument = require('./swagger.json');
+
+
+// Swagger configuration
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Nom de votre API',
+      version: '1.0.0',
+      description: 'Description de votre API',
+    },
+  },
+  apis: ['./routes/*.js'],
+};
+const swaggerSpec = swaggerJSDoc(options);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 // MongoDB
@@ -18,12 +38,12 @@ const mongoURI = 'mongodb+srv://admin:ewuXrOL2cQQym9Rq@cluster0.gwkwwvf.mongodb.
 // Connect to MongoDB
 mongoose.connect(mongoURI, {
 })
-.then(() => {
-  console.log('MongoDB connected');
-})
-.catch(err => {
-  console.error('MongoDB connection error', err);
-});
+  .then(() => {
+    console.log('MongoDB connected');
+  })
+  .catch(err => {
+    console.error('MongoDB connection error', err);
+  });
 
 // Define middleware
 app.use(express.json());
@@ -40,6 +60,7 @@ app.use("/suggestion", suggestionRouter);
 app.use("/savedTrip", savedTripRouter);
 
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(port, () => {
   console.log(`Server connected on port 3000`);

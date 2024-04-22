@@ -14,6 +14,7 @@ exports.getAllSavedTrip = async (req, res) => {
 
 exports.createSavedTrip = async (req, res) => {
     try {
+        console.log(req.body)
         const { userId, journeyId, suggestionId } = req.body;
         const existingSavedTrip = await SavedTrip.findOne({ userId, journeyId, suggestionId });
         if (existingSavedTrip) {

@@ -87,8 +87,4 @@ describe('User Model', function () {
         await User.deleteMany();
     });
       
-    // Disconnect from MongoDB after tests
-    after(function () {
-        return mongoose.connection.close();
-    });
 });

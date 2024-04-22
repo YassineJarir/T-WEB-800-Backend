@@ -236,7 +236,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"departure\" : \"30.56890\",\r\n    \"arrival\" : \"15.48540\"\r\n}",
+							"raw": "{\r\n    \"title\": \"trajet boulot\",\r\n    \"departure\" : \"30.56890\",\r\n    \"arrival\" : \"15.48540\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -282,7 +282,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"departure\" : \"50.00000\",\r\n    \"arrival\" : \"40.00000\"\r\n}",
+							"raw": "{\r\n    \"title\" : \"new title\",\r\n    \"departure\" : \"50.00000\",\r\n    \"arrival\" : \"40.00000\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -290,14 +290,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/journey/6622e750c7362f3c98405e10",
+							"raw": "localhost:3000/journey/662570f9a002a5da45df67e9",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"journey",
-								"6622e750c7362f3c98405e10"
+								"662570f9a002a5da45df67e9"
 							]
 						}
 					},
@@ -309,14 +309,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/journey/6622eca0baee1f052e571bb5",
+							"raw": "localhost:3000/journey/662570f9a002a5da45df67e9",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"journey",
-								"6622eca0baee1f052e571bb5"
+								"662570f9a002a5da45df67e9"
 							]
 						}
 					},

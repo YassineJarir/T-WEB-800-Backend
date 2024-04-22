@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
  * @param {Object} res - The response object.
  * @returns {void}
  */
-exports.getAll = (req,res) => {
+exports.getAll = (req, res) => {
     User.find().exec()
       .then(result => {
         return res.status(200).json(result);

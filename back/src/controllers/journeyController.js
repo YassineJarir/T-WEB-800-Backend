@@ -3,12 +3,8 @@ const Journey = require('../models/journeyModel');
 
 exports.createJourney = async (req, res) => {
     try {
-        const { departure, arrival } = req.body;
-        const existingJourney = await Journey.findOne({ departure, arrival });
-        if (existingJourney) {
-            return res.status(400).json({ error: 'Journey with the same departure and arrival already exists' });
-        }
-        const journey = new Journey({ departure, arrival });
+        const { title, departure, arrival } = req.body;
+        const journey = new Journey({ title, departure, arrival });
         await journey.save();
         res.status(201).json( journey );
     } catch (error) {
@@ -44,8 +40,8 @@ exports.getJourneyById = async (req, res) => {
 exports.updateJourney = async (req, res) => {
     try {
         const { journeyId } = req.params;
-        const { departure, arrival } = req.body;
-        const updatedJourney = await Journey.findByIdAndUpdate(journeyId, { departure, arrival }, { new: true });
+        const { title, departure, arrival } = req.body;
+        const updatedJourney = await Journey.findByIdAndUpdate(journeyId, { title, departure, arrival }, { new: true });
         if (!updatedJourney) {
             return res.status(404).json({ message: 'Journey not found' });
         }
