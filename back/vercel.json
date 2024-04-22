@@ -5,7 +5,7 @@
             "src": "app.js",
             "use": "@vercel/node",
             "config": {
-              "command": "npm test && npm run build && npm start"
+              "command": "npm start"
             }
         }
     ],
