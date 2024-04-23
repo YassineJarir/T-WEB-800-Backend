@@ -25,7 +25,7 @@ exports.getAll = (req, res) => {
 exports.getById = (req, res) => {
     User.findById(req.params.id).exec()
     .then(result => {
-      return res.status(200).json(result);
+      return null;
     })
     .catch(err => {
       return res.status(500).json(err);
